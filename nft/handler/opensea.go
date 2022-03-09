@@ -79,6 +79,9 @@ func (o *OpenSea) Assets(ctx context.Context, req *pb.AssetsRequest, rsp *pb.Ass
 		params += "&collection=" + req.Collection
 	}
 
+	logger.Infof("Cursor %s", req.Cursor)
+	logger.Infof("Params %s", params)
+
 	var resp domain.AssetsResponse
 
 	if err := api.Get(uri+params, &resp); err != nil {
