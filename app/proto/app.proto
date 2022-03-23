@@ -74,6 +74,8 @@ message RunRequest {
 	int32 port = 5;
 	// associated env vars to pass in
 	map<string,string> env_vars = 6;
+	// if true, uses the docker file in the repo to build rather than auto detecting a webpack
+	bool use_docker_file = 7;
 }
 
 message RunResponse {

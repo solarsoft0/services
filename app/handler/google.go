@@ -374,9 +374,14 @@ func (e *GoogleApp) Run(ctx context.Context, req *pb.RunRequest, rsp *pb.RunResp
 
 	go func(service *pb.Service) {
 		imageName := fmt.Sprintf("%s-docker.pkg.dev/%s/cloud-run-source-deploy/%s", req.Region, e.project, service.Id)
-		cmd := exec.Command("gcloud", "builds", "submit", "--project", e.project, "--format", "json",
-			"--pack", "image="+imageName, ".",
-		)
+		args := []string{"builds", "submit", "--project", e.project, "--format", "json"}
+		if req.UseDockerFile {
+			args = append(args, "--tag="+imageName, ".")
+		} else {
+			args = append(args, "--pack", "image="+imageName, ".")
+		}
+
+		cmd := exec.Command("gcloud", args...)
 
 		// set the command dir
 		cmd.Dir = gitter.RepoDir()
